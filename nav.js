@@ -5,11 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
     'mekanisk_verksted.html': 'mekanisk-verksted.html',
     'omoss.html': 'om-oss.html'
   };
-  const normalized = aliases[current] || current;
+  const servicePages = new Set(['cnc-maskinering.html', 'cncmaskinering.html', 'elektromotorer.html', 'mekanisk-verksted.html', 'mekanisk_verksted.html']);
+  const normalized = servicePages.has(current) ? 'index.html#tjenester' : (aliases[current] || current);
 
   document.querySelectorAll('.navlinks a[href]').forEach((link) => {
-    const target = link.getAttribute('href').split('#')[0].toLowerCase();
-    if (target && target !== '#' && (target === normalized || aliases[target] === normalized)) {
+    const rawTarget = link.getAttribute('href').toLowerCase();
+    const target = rawTarget.includes('#tjenester') ? 'index.html#tjenester' : rawTarget.split('#')[0];
+    if (target && target !== '#' && (target === normalized || target === 'index.html#tjenester' && normalized === 'index.html#tjenester' || aliases[target] === normalized)) {
       link.classList.add('active');
       link.setAttribute('aria-current', 'page');
     }
